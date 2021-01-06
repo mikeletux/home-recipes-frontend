@@ -28,13 +28,19 @@ $('#recipesTable tbody').on("click", "#recipeButton", function (e) {
     //console.log($( this ).attr("recipe-link"));
     $.ajax({
         url: endpoint + $( this ).attr("recipe-link"),
-        type: "GET",
+        type: "GET", 
         contentType: "application/json",
         dataType: 'json',
         success: function(item){
-            console.log(item);
-            //Check if the id exists. If no, create it. If so, just replace everything
-            $("body").append(
+            //empty div that holds the modal
+            $("#modalShowRecipe").empty();
+            //Create HTML list
+            var ingredientsList = ""; //Initialize the var
+            $.each(item.ingredients, function(i) {
+              ingredientsList += '<li class="list-group-item">' + item.ingredients[i] + '</li>'
+            });
+            //Write modal
+            $("#modalShowRecipe").append(
                 '<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">' +
                 '<div class="modal-dialog">' +
                 '<div class="modal-content">' +
@@ -43,10 +49,29 @@ $('#recipesTable tbody').on("click", "#recipeButton", function (e) {
                     '<button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close">' +
                     '</button>' +
                   '</div>' +
-                  '<div class="modal-body">' + item.text + '</div>' + 
+                  //Set vertigal gutters with gy-* class
+                  '<div class="modal-body row gy-3">' +
+                    //Header recipe image
+                    '<div>' +
+                      '<img src="' + item.image +'" class="img-fluid" alt="..." />' +
+                    '</div>' +
+                    '<div>' +
+                      //Ingredients header
+                      '<p class="h4">Ingredients</p>' +
+                      //Add ingredients list
+                      '<ul class="list-group">' +
+                        ingredientsList +
+                      '</ul>' +
+                    '</div>' +
+                    //Recipe steps header
+                    '<div>' +
+                      '<p class="h4">Recipe steps</p>' +
+                      //Add recipe steps
+                      item.text + 
+                    '</div>' +
+                  '</div>' + 
                   '<div class="modal-footer">' +
-                    '<button type="button" class="btn btn-secondary" data-mdb-dismiss="modal"> Close </button>' +
-                    //'<button type="button" class="btn btn-primary">Save changes</button>' +
+                    '<button type="button" class="btn btn-primary" data-mdb-dismiss="modal"> Close </button>' +
                   '</div>' +
                 '</div>' +
               '</div>' +
