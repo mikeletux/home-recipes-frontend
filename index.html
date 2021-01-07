@@ -19,6 +19,7 @@
     <!-- Custom styles -->
   </head>
   <body>
+
     <!-- Navigation Bar begins -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
@@ -37,14 +38,14 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
             <!-- <a class="nav-link active" aria-current="page" id="allrecipes" href="#">All recipes</a> -->
-            <a class="nav-link" href="#">Create recipe</a>
+            <a class="nav-link" data-mdb-toggle="modal" data-mdb-target="#createRecipeModal"href="#">Create recipe</a>
           </div>
         </div>
       </div>
     </nav>
     <!-- Navigation Bar Finishes -->
     
-    <!-- Table begins-->
+    <!-- Table recipes begins-->
     <table class="table table-hover" id="recipesTable">
       <thead>
         <tr>
@@ -56,9 +57,76 @@
       <tbody>
       </tbody>
     </table>
-    <!-- Modal -->
+    <!-- Table recipes Finishes-->
+
+    <!-- Modal div to be filled when clicked on recipe to show begins-->
     <div id="modalShowRecipe">
     </div>
+    <!-- Modal div to be filled when clicked on recipe to show finishes-->
+    
+    <!-- Modal to create recipe beings-->
+    <div
+    class="modal fade"
+    id="createRecipeModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createRecipeModalLabel">Create recipe</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-mdb-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <!-- Form to add a new recipe begins-->
+          <form>
+            <!-- Recipe name -->
+            <div class="form-outline mb-4">
+              <input type="text" id="formRecipeName" class="form-control" />
+              <label class="form-label" for="formRecipeName">Recipe name</label>
+            </div>
+            <!-- URL to image -->
+            <div class="form-outline mb-4">
+              <input type="text" id="formRecipeImage" class="form-control" />
+              <label class="form-label" for="formRecipeImage">Recipe image (URL)</label>
+            </div>
+            <!-- Add ingredient -->
+            <div id=add-ingredients>
+              <div class="form-outline input-group mb-4">
+                <input type="text" id="formRecipeIngredients" class="form-control" />
+                <label class="form-label" for="formRecipeIngredients">Ingredient</label>
+                <button type="button" class="btn btn-primary" id="form-add-ingredients-button">Add</button>
+              </div>
+              <!-- List that holds the added ingredients-->
+              <div class="mb-4">
+                <ul class="list-group" id="ingredients-list-form"></ul>
+              </div>
+            </div>
+            <!-- Add recipe steps -->
+            <div class="form-outline mb-4">
+              <textarea class="form-control" id="formRecipeSteps" rows="4"></textarea>
+              <label class="form-label" for="formRecipeSteps">Recipe steps</label>
+            </div>
+          </form>
+          <!-- Form to add a new recipe finishes-->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+            Close
+          </button>
+          <button type="button" class="btn btn-primary">Save recipe</button>
+        </div>
+      </div>
+    </div>
+    </div>
+    <!-- Modal to create recipe finishes-->
+
   </body>
 
   <!-- MDB -->

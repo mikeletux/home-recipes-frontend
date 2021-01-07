@@ -83,3 +83,23 @@ $('#recipesTable tbody').on("click", "#recipeButton", function (e) {
         },
     });
 });
+
+//Adds ingredients to the list
+$("#form-add-ingredients-button").click(function() {
+  //Check if string is empty first
+    $("#ingredients-list-form").append('<li class="list-group-item d-flex justify-content-between">' + 
+                                          '<div id="ingredient-listname-form">' +
+                                            $("#formRecipeIngredients").val() +
+                                          '</div>' +
+                                          '<div >' +
+                                            '<a id="ingredient-remove-form" href="#" ><i class="fas fa-times"> </i></a>' +
+                                          '</div>' +
+                                      '</li>');
+    $("#formRecipeIngredients").val("");
+});
+
+//Removes ingredients from the list
+$("#ingredients-list-form").on("click", "#ingredient-remove-form", function(e) {
+  e.preventDefault();
+  $(this).closest('li').remove();
+});
