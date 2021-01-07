@@ -98,8 +98,35 @@ $("#form-add-ingredients-button").click(function() {
     $("#formRecipeIngredients").val("");
 });
 
-//Removes ingredients from the list
+//Event that Removes ingredients from the list
 $("#ingredients-list-form").on("click", "#ingredient-remove-form", function(e) {
   e.preventDefault();
   $(this).closest('li').remove();
+});
+
+//Event that POST the recipe to the backend
+$('#createRecipeModal').on("click", "#saveRecipeButton", function (e) {
+  e.preventDefault();
+  //Get ingredients list
+  var ingredientsList = []; //Initialize the var
+  $("#ingredients-list-form li").each(function (){
+    ingredientsList.push($(this).find("#ingredient-listname-form").text());
+    //console.log(ingredientsList);
+  });
+  $.ajax({
+    url: endpoint + "/api/v1/recipes",
+    type:"POST",
+    data: JSON.stringify({
+      name: $("#formRecipeName").val(),
+      image: $("#formRecipeImage").val(),
+      ingredients: ingredientsList,
+      text: $("#formRecipeSteps").val()
+    }),
+    statusCode: {
+      201: function(item) {
+        alert("Recipe created")
+      }
+    },
+    dataType: 'json'
+  });
 });
