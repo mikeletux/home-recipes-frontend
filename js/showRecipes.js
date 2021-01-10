@@ -9,13 +9,13 @@ $(document).ready(function() {
         contentType: "application/json",
         dataType: 'json',
         success: function(list){
-            //console.log(list);
             $.each(list, function(i) {
                 $(".table tbody").append("<tr>" +
                                          "<td>" + (i+1) + "</td>" +
                                          //"<td><a class=\"pe-auto\" id=\"recipeButton\" data-mdb-toggle=\"modal\" data-mdb-target=\"#exampleModal\" href=\"#\" recipe-link=\"" + list[i].location + "\">" + list[i].name + "</a></td>" +
                                          "<td><a class=\"pe-auto\" id=\"recipeButton\" href=\"#\" recipe-link=\"" + list[i].location + "\">" + list[i].name + "</a></td>" +
                                          "<td>" + list[i].updatedTime + "</td>" +
+                                         '<td id="recipeRemoval"><a href="#" location="' + list[i].location + '"><i class="fas fa-times"> </i></a></td>' +
                                          "</tr>");
             });
         },
@@ -116,15 +116,34 @@ $('#createRecipeModal').on("click", "#saveRecipeButton", function (e) {
   $.ajax({
     url: endpoint + "/api/v1/recipes",
     type:"POST",
-    data: JSON.stringify({
-      name: $("#formRecipeName").val(),
-      image: $("#formRecipeImage").val(),
-      ingredients: ingredientsList,
-      text: $("#formRecipeSteps").val()
-    }),
     statusCode: {
       201: function(item) {
         alert("Recipe created")
+        $('#createRecipeModal').modal('hide'); //ALSO EMPTY THE FIELDS
+      }
+    },
+    dataType: 'json'
+  });
+});
+
+//Event that captures when clicking on X for recipe removal
+$("#recipesTable tbody").on("click", "#recipeRemoval", function(e){
+  e.preventDefault();
+  //Show warning window to prevent deleting recipe from mistake
+  $('#recipeRemovalModal').modal('show');
+  $('#recipeRemovalButton').attr("location", $(this).children("a").attr("location"))
+});
+
+//Event that triggers recipe removal
+$("#recipeRemovalModal").on("click", "#recipeRemovalButton", function(e){
+  $.ajax({
+    url: endpoint + $('#recipeRemovalButton').attr("location"),
+    type:"DELETE",
+    statusCode: {
+      202: function(item) {
+        alert("Recipe removed")
+        $('#recipeRemovalModal').modal('hide'); //ALSO EMPTY THE FIELDS
+        location.reload(); //It reloads the website
       }
     },
     dataType: 'json'
