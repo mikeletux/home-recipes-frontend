@@ -10,12 +10,16 @@ $(document).ready(function() {
         dataType: 'json',
         success: function(list){
             $.each(list, function(i) {
+              //Format time to show
+              var updatedDate = jQuery.format.prettyDate(list[i].updatedTime)
+              var createdDate = jQuery.format.date(list[i].creationTime, 'dd/MM/yyyy')
                 $(".table tbody").append("<tr>" +
                                          "<td>" + (i+1) + "</td>" +
                                          //"<td><a class=\"pe-auto\" id=\"recipeButton\" data-mdb-toggle=\"modal\" data-mdb-target=\"#exampleModal\" href=\"#\" recipe-link=\"" + list[i].location + "\">" + list[i].name + "</a></td>" +
                                          "<td><a class=\"pe-auto\" id=\"recipeButton\" href=\"#\" recipe-link=\"" + list[i].location + "\">" + list[i].name + "</a></td>" +
-                                         "<td>" + list[i].updatedTime + "</td>" +
-                                         '<td id="recipeRemoval"><a href="#" location="' + list[i].location + '"><i class="fas fa-times"> </i></a></td>' +
+                                         "<td>" + updatedDate + "</td>" +
+                                         "<td>" + createdDate + "</td>" +
+                                         '<td id="recipeRemoval"><a href="#" location="' + list[i].location + '" recipeName="' + list[i].name + '"><i class="fas fa-times"> </i></a></td>' +
                                          "</tr>");
             });
         },
@@ -113,16 +117,26 @@ $('#createRecipeModal').on("click", "#saveRecipeButton", function (e) {
     ingredientsList.push($(this).find("#ingredient-listname-form").text());
     //console.log(ingredientsList);
   });
+
+  var recipe = {
+    name: $("#createRecipeModal #formRecipeName").val(),
+    image: $("#createRecipeModal #formRecipeImage").val(),
+    ingredients: ingredientsList,
+    text: $("#createRecipeModal #formRecipeSteps").val()
+  }
+
   $.ajax({
     url: endpoint + "/api/v1/recipes",
     type:"POST",
+    dataType: 'json',
     statusCode: {
       201: function(item) {
-        alert("Recipe created")
+        //alert("Recipe created")
         $('#createRecipeModal').modal('hide'); //ALSO EMPTY THE FIELDS
+        location.reload(); //It reloads the website
       }
     },
-    dataType: 'json'
+    data: JSON.stringify(recipe)
   });
 });
 
@@ -130,8 +144,10 @@ $('#createRecipeModal').on("click", "#saveRecipeButton", function (e) {
 $("#recipesTable tbody").on("click", "#recipeRemoval", function(e){
   e.preventDefault();
   //Show warning window to prevent deleting recipe from mistake
-  $('#recipeRemovalModal').modal('show');
+  //recipeName Are you sure you want to delete this recipe?
+  $('#recipeRemovalModal .modal-body').text("Are you sure you want to delete \"" + $(this).children("a").attr("recipeName") + "\" recipe?")
   $('#recipeRemovalButton').attr("location", $(this).children("a").attr("location"))
+  $('#recipeRemovalModal').modal('show');
 });
 
 //Event that triggers recipe removal
@@ -141,11 +157,11 @@ $("#recipeRemovalModal").on("click", "#recipeRemovalButton", function(e){
     type:"DELETE",
     statusCode: {
       202: function(item) {
-        alert("Recipe removed")
+        //alert("Recipe removed")
         $('#recipeRemovalModal').modal('hide'); //ALSO EMPTY THE FIELDS
         location.reload(); //It reloads the website
       }
     },
     dataType: 'json'
   });
-});
+}); 
