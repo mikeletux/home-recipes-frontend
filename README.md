@@ -13,6 +13,6 @@ docker run -dit --name home-recipes-frontend -p 8081:80 -e "HOME_RECIPES_API=htt
 ~~~
 
 Envoronment variables:
-  - HOME_RECIPES_API: Tell the frontend where the Rest API is.ç
+  - HOME_RECIPES_API: Tells the frontend where the Rest API is.
 
 /Miguel Sama 2021
