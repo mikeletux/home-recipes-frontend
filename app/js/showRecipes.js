@@ -68,7 +68,7 @@ $('#recipesTable tbody').on("click", "#recipeButton", function (e) {
                     '<div>' +
                       '<p class="h4">Recipe steps</p>' +
                       //Add recipe steps
-                      item.text + 
+                      item.text.replace(/\r?\n/g, '<br />') + 
                     '</div>' +
                   '</div>' + 
                   '<div class="modal-footer">' +
